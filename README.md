@@ -1,4 +1,4 @@
-Tipsy: A flask todolist
-=======================
+Tipsy: A Flask to-do list
+=========================
 
-View the tutorial at http://chriszf.github.com/tipsy/
+http://chriszf.github.com/tipsy/

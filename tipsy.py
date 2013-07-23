@@ -1,5 +1,5 @@
 """
-tipsy.py -- A flask-based todo list
+tipsy.py -- This is a Flask-based to-do list
 """
 from flask import Flask, render_template
 import model
