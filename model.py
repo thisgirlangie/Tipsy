@@ -2,11 +2,25 @@
 model.py
 """
 import sqlite3
+import re
+
+from datetime import datetime
+
+DB = None
+CONN = None
 
 def connect_db():
     return sqlite3.connect("tipsy.db")
 
-def new_user(db, email, password, name):          
+class User(Base):
+    __tablename__ = "users"
+
+    id = Column(Integer, primary_key=True)
+    email = Column(String(64), nullable=True)
+    password = Column(String(64), nullable=True)
+    name = Column(String(64), nullable=True)
+
+    def new_user(email, password, name):          
     c = db.cursor()                                     
     query = """INSERT INTO Users VALUES (NULL, ?, ?, ?)"""                                                           
     c.execute(query, (email, password, name))           
@@ -27,9 +41,11 @@ def get_user(db, user_id):
     """Gets a user dictionary out of the database given an id"""
     pass
 
-def new_task(db, title, user_id):
-    """Given a title and a user_id, create a new task belonging to that user. Return the id of the created task"""
-    pass
+def new_task(title, datestamp, user_id):
+    query = """INSERT into Tasks values (?,?,?)"""
+    DB.execute(query, (title, datetime.now(), user_id))
+    CONN.commit()
+    return "Successfully added task: %s" % title
 
 def complete_task(db, task_id):
     """Mark the task with the given task_id as being complete."""
@@ -41,3 +57,15 @@ def get_tasks(db, user_id=None):
 
 def get_task(db, task_id):
     """Gets a single task, given its id. Returns a dictionary of the task data."""
+
+def connect_to_db():
+    global DB, CONN
+    CONN = sqlite3.connect("tipsy.db")
+    DB = CONN.cursor()
+
+def main():
+    connect_to_db()
+    command = None
+
+if __name__ == "__main__":
+    main()
